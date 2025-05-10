@@ -44,7 +44,7 @@ def view_users_transaction_history():
         print(f"Holder Name: {info['name']}")
         print("Transactions:")
         for t in info["transactions"]:
-            print(f" {t}")
+            print(f"  {t}")
 
 def admin_panel():
     while True:
@@ -71,6 +71,7 @@ def admin_panel():
 def create_account():
     global next_account_number
     name = input("Enter account holder name: ").strip()
+    password = input("Set a password for this account: ").strip()
     try:
         initial_balance = float(input("Enter initial balance: "))
         if initial_balance < 0:
@@ -84,6 +85,7 @@ def create_account():
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     accounts[account_number] = {
         "name": name,
+        "password": password,
         "balance": initial_balance,
         "transactions": [f"{timestamp} - Account created with {initial_balance}"]
     }
@@ -146,12 +148,17 @@ def view_account(acc_no=None):
     print(f"Balance: {info['balance']}")
     print("Transactions:")
     for t in info["transactions"]:
-        print(f" {t}")
+        print(f"  {t}")
 
 def user_panel():
     acc_no = input("Enter your account number: ").strip()
     if acc_no not in accounts:
         print("Account not found.")
+        return
+
+    password = input("Enter your password: ").strip()
+    if accounts[acc_no]["password"] != password:
+        print("Incorrect password.")
         return
 
     while True:
@@ -196,5 +203,5 @@ def main_menu():
         else:
             print("Invalid choice. Please try again.")
 
-if __name__ == "__main__":
-    main_menu()
+
+main_menu()
